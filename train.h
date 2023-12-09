@@ -1,4 +1,6 @@
 #include <string>
+#include "time.h"
+#include <iostream>
 
 using ull = unsigned long long;
 
@@ -10,4 +12,8 @@ public:
     passager, fast
   }
   Type type;
-  
+  Time departue;
+  Time way;
+  Train(ull, std::string, Type, Time, Time);
+  friend std::ostream& operator<<(std::ostream&, const Train&) const;
+}
