@@ -1,19 +1,21 @@
-#include <string>
-#include "time.h"
-#include <iostream>
+#pragma once
 
-using ull = unsigned long long;
+#include "time.h" //NOLINT
+#include <iostream>
+#include <string>
+
+using Ull = unsigned long long;
 
 class Train {
 public:
-  ull number;
+  Ull number;
   std::string where_to;
   enum class Type {
     passager, fast
-  }
+  };
   Type type;
   Time departue;
   Time way;
-  Train(ull, std::string, Type, Time, Time);
-  friend std::ostream& operator<<(std::ostream&, const Train&) const;
-}
+  Train(Ull, std::string, Type, Time, Time);
+  friend std::ostream& operator<<(std::ostream&, const Train&) ; //NOLINT
+};
