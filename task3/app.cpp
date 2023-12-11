@@ -45,6 +45,8 @@ int main() {
   std::sort(v.begin(), v.end(), [](const Train& first, const Train& second){
     return first.departue < second.departue;
   });
+  std::cout << "sorted by time\n";
+  std::for_each(v.begin(), v.end(), [](const Train& i){ std::cout << i << '\n'; });
     {
         unsigned hour, minutes; //NOLINT
         std::cout << "enter hours and minutes to begin:\n";
@@ -53,6 +55,7 @@ int main() {
         std::cout << "enter hours and minutes to end:\n";
         std::cin >> hour >> minutes;
         Time const end(hour, minutes);
+        if (end < begin) { std::cout << "Wrong end time!\n"; return -1; }
         auto begin_i = std::lower_bound(v.begin(), v.end(), begin, [](const Train& i, const Time& val) {
             return i.departue < val;
         });
@@ -60,20 +63,28 @@ int main() {
         [](const Time& end, const Train& i){
             return i.departue > end;
         });
+        if (begin_i == end_i) {
+            std::cout << "No trains for this timeline\n";
+        } else {
         std::cout << "trains from " << begin << " to " << end << '\n';
         std::for_each(begin_i, end_i, [](const Train& i){ std::cout << i << '\n'; });
+        }
     }
     {
         std::string where;
         std::cout << "what place: ";
         std::cin >> where;
         std::vector<Train> c(v);
-        std::cout << "DEBUG\t" << "begin removing\n";
+        // std::cout << "DEBUG\t" << "begin removing\n";
         auto end = std::copy_if(v.begin(), v.end(), c.begin(), [&where](const Train& i){
             return i.where_to == where;
         });
+        if (c.begin() == end) {
+            std::cout << "No trains to that place\n";
+        } else {
         std::cout << "trains to:\n";
         std::for_each(c.begin(), end, [](const Train& i){ std::cout << i << '\n'; });
+        }
     }
     {
         std::string where;
@@ -83,8 +94,12 @@ int main() {
         auto end = std::copy_if(v.begin(), v.end(), c.begin(), [&where](const Train& i){
             return i.where_to == where && i.type == Train::Type::fast;
         });
+        if (c.begin() == end) {
+            std::cout << "No fast trains to that place\n";
+        } else {
         std::cout << "fast trains to:\n";
         std::for_each(c.begin(), end, [](const Train& i){ std::cout << i << '\n'; });
+        }
     }
     {
         std::string where;
@@ -94,7 +109,11 @@ int main() {
         auto end = std::copy_if(v.begin(), v.end(), c.begin(), [&where](const Train& i){
             return i.where_to == where && i.type == Train::Type::fast;
         });
+        if (end == c.begin()) {
+            std::cout << "No fast trains to that place\n";
+        } else {
         std::cout << "fastest train to:\n";
         std::cout << *std::min_element(c.begin(), end, [](const Train& left, const Train& right) { return left.way < right.way; }) << '\n';
+        }
     }
 }

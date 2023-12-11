@@ -1,4 +1,5 @@
 #include "time.h" //NOLINT
+#include <iomanip>
 
 Time::Time(unsigned h, unsigned m) : hours(h % 24), minutes(m % 60) {};
 
@@ -11,7 +12,7 @@ unsigned Time::GetMinutes() const {
 }
 
 std::ostream& operator<<(std::ostream& out, const Time& t) {
-    out << t.hours << ':' << t.minutes;
+    out << std::setw(2) << std::setfill('0') << t.hours << ':' << std::setw(2) << std::setfill('0') << t.minutes;
     return out;
 }
 
